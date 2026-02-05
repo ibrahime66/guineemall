@@ -81,7 +81,7 @@
                                      alt="{{ $product->name }}"
                                      class="w-full h-full object-cover"
                                      loading="lazy"
-                                     onerror="this.onerror=null;this.src='{{ asset('images/default-product.jpg') }}';">
+                                     onerror="this.onerror=null;this.src='{{ asset('images/default-product.svg') }}';">
                                 @if($product->stock <= 0)
                                     <span class="absolute top-2 right-2 bg-gray-500 text-white text-xs px-2 py-1 rounded">
                                         Rupture

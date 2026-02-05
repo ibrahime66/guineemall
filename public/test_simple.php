@@ -53,8 +53,8 @@
     ?>
     
     <h2>Test fallback:</h2>
-    <img src="<?php echo asset('images/default-product.jpg'); ?>" class='test-image' onerror="this.style.border='3px solid red';">
-    <p>Fallback: <?php echo asset('images/default-product.jpg'); ?></p>
+    <img src="<?php echo asset('images/default-product.svg'); ?>" class='test-image' onerror="this.style.border='3px solid red';">
+    <p>Fallback: <?php echo asset('images/default-product.svg'); ?></p>
     
 </body>
 </html>

@@ -17,11 +17,11 @@
                 @foreach($cartItems as $item)
                     <div class="flex items-center justify-between py-3 border-b">
                         <div class="flex items-center space-x-4">
-                            @if($item->product->image)
-                                <img src="{{ Storage::url($item->product->image) }}" alt="{{ $item->product->name }}" 
+                            @if($item->product->image_url)
+                                <img src="{{ $item->product->image_url }}" alt="{{ $item->product->name }}" 
                                      class="w-16 h-16 object-cover rounded" 
                                      loading="lazy"
-                                     onerror="this.src='https://via.placeholder.com/64x64/10b981/ffffff?text=Produit'">
+                                     onerror="this.src='{{ asset('images/default-product.svg') }}'">
                             @else
                                 <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded flex items-center justify-center">
                                     <i class="fas fa-box text-green-600"></i>

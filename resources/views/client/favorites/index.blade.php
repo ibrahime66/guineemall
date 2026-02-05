@@ -30,7 +30,7 @@
                              alt="{{ $product->name }}"
                              class="w-full h-full object-cover"
                              loading="lazy"
-                             onerror="this.onerror=null;this.src='{{ asset('images/default-product.jpg') }}';">
+                             onerror="this.onerror=null;this.src='{{ asset('images/default-product.svg') }}';">
                     </a>
                     <div class="p-4">
                         <p class="text-xs text-gray-500 mb-1">{{ $product->category->name ?? '—' }}</p>

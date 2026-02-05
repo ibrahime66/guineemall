@@ -9,7 +9,7 @@
             <img src="{{ $vendor->image_url }}"
                  alt="{{ $vendor->shop_name }}"
                  class="w-20 h-20 rounded-xl object-cover border border-gray-200"
-                 onerror="this.src='{{ asset('images/default-vendor-logo.png') }}'">
+                 onerror="this.src='{{ asset('images/default-vendor-logo.svg') }}'">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ $vendor->shop_name }}</h1>
                 <p class="text-sm text-gray-600 mt-1">
@@ -41,7 +41,7 @@
                              alt="{{ $product->name }}"
                              class="w-full h-full object-cover"
                              loading="lazy"
-                             onerror="this.onerror=null;this.src='{{ asset('images/default-product.jpg') }}';">
+                             onerror="this.onerror=null;this.src='{{ asset('images/default-product.svg') }}';">
                     </a>
                     <div class="p-4">
                         <p class="text-xs text-gray-500 mb-1">{{ $product->category->name ?? '—' }}</p>

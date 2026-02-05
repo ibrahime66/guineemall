@@ -34,7 +34,7 @@
                          class="w-full h-full object-cover transition-transform duration-300"
                          loading="lazy"
                          :class="zoomed ? 'max-w-4xl max-h-4xl' : 'group-hover:scale-105'"
-                         onerror="this.src='{{ asset('images/default-product.jpg') }}'">
+                         onerror="this.src='{{ asset('images/default-product.svg') }}'">
                     
                     @if($product->image)
                         <div class="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
@@ -56,7 +56,7 @@
                                  alt="{{ $product->name }} thumbnail"
                                  class="w-full h-full object-cover transition-transform hover:scale-110"
                                  loading="lazy"
-                                 onerror="this.src='{{ asset('images/default-product.jpg') }}'">
+                                 onerror="this.src='{{ asset('images/default-product.svg') }}'">
                         </button>
                         
                         {{-- Miniatures additionnelles (simulées) --}}
@@ -68,7 +68,7 @@
                                      alt="{{ $product->name }} vue {{ $i + 1 }}"
                                      class="w-full h-full object-cover transition-transform hover:scale-110 opacity-90 hover:opacity-100"
                                      loading="lazy"
-                                     onerror="this.src='{{ asset('images/default-product.jpg') }}'">
+                                     onerror="this.src='{{ asset('images/default-product.svg') }}'">
                             </button>
                         @endfor
                     </div>
@@ -167,7 +167,7 @@
                                     <img src="{{ $product->vendor->image_url }}"
                                          alt="{{ $product->vendor->shop_name }}"
                                          class="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md"
-                                         onerror="this.src='{{ asset('images/default-vendor-logo.png') }}'">
+                                         onerror="this.src='{{ asset('images/default-vendor-logo.svg') }}'">
                                 @else
                                     <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md">
                                         V
@@ -252,14 +252,14 @@
                     <div class="bg-white rounded-xl shadow hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer">
                         <a href="{{ route('client.catalog.show', $related) }}" class="block">
                             <div class="aspect-square bg-gray-100 overflow-hidden">
-                                @if($related->image)
-                                    <img src="{{ asset('storage/' . $related->image) }}"
+                                @if($related->image_url)
+                                    <img src="{{ $related->image_url }}"
                                          alt="{{ $related->name }}"
                                          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                          loading="lazy"
-                                         onerror="this.src='{{ asset('images/default-product.jpg') }}'">
+                                         onerror="this.src='{{ asset('images/default-product.svg') }}'">
                                 @else
-                                    <img src="{{ asset('images/default-product.jpg') }}"
+                                    <img src="{{ asset('images/default-product.svg') }}"
                                          alt="{{ $related->name }}"
                                          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                          loading="lazy">

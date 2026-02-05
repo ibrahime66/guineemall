@@ -68,7 +68,7 @@
             
             // Test fallback
             echo "<h4>🔄 Test fallback:</h4>";
-            $fallbackUrl = asset('images/default-product.jpg');
+            $fallbackUrl = asset('images/default-product.svg');
             echo "<img src='$fallbackUrl' class='test-image' onerror=\"this.style.border='3px solid red';\">";
             
             echo '</div>';

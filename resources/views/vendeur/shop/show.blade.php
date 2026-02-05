@@ -9,8 +9,8 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div class="flex items-center mb-4 md:mb-0">
                 <!-- Logo Boutique -->
-                @if($vendor->logo)
-                    <img src="{{ asset('storage/' . $vendor->logo) }}" alt="Logo {{ $vendor->shop_name }}" class="w-20 h-20 object-cover rounded-xl mr-6">
+                @if($vendor->image_url)
+                    <img src="{{ $vendor->image_url }}" alt="Logo {{ $vendor->shop_name }}" class="w-20 h-20 object-cover rounded-xl mr-6">
                 @else
                     <div class="w-20 h-20 bg-white/20 rounded-xl flex items-center justify-center mr-6">
                         <i class="fas fa-store text-white text-3xl"></i>
@@ -58,8 +58,8 @@
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <!-- Un seul logo ici -->
-                    @if($vendor->logo)
-                        <img src="{{ asset('storage/' . $vendor->logo) }}" alt="Logo {{ $vendor->shop_name }}" class="w-12 h-12 object-cover rounded-lg mr-3">
+                    @if($vendor->image_url)
+                        <img src="{{ $vendor->image_url }}" alt="Logo {{ $vendor->shop_name }}" class="w-12 h-12 object-cover rounded-lg mr-3">
                     @else
                         <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-store text-gray-400"></i>
