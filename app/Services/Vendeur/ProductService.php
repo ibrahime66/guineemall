@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 
 class ProductService
 {
@@ -167,8 +168,10 @@ class ProductService
      */
     public function getCategories(): \Illuminate\Database\Eloquent\Collection
     {
-        return Category::where('status', 'active')
-            ->orderBy('name')
-            ->get();
+        return Cache::remember('categories_active', 600, function () {
+            return Category::where('status', 'active')
+                ->orderBy('name')
+                ->get();
+        });
     }
 }

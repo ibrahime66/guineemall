@@ -5,6 +5,7 @@ namespace App\Notifications;
 use App\Models\VendorOrder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class NewOrderForVendor extends Notification
 {
@@ -19,7 +20,7 @@ class NewOrderForVendor extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -28,10 +29,22 @@ class NewOrderForVendor extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Nouvelle commande',
-            'message' => 'Vous avez recu une nouvelle commande #' . $this->vendorOrder->id . '.',
+            'title' => __('messages.notifications.new_order_title'),
+            'message' => __('messages.notifications.new_order_message', [
+                'id' => $this->vendorOrder->id,
+            ]),
             'action_url' => route('vendeur.orders.show', $this->vendorOrder),
-            'action_text' => 'Voir la commande',
+            'action_text' => __('messages.notifications.new_order_action'),
         ];
+    }
+
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->subject(__('messages.notifications.new_order_title'))
+            ->line(__('messages.notifications.new_order_message', [
+                'id' => $this->vendorOrder->id,
+            ]))
+            ->action(__('messages.notifications.new_order_action'), route('vendeur.orders.show', $this->vendorOrder));
     }
 }

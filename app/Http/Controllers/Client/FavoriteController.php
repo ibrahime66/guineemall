@@ -39,12 +39,12 @@ class FavoriteController extends Controller
         if ($isFavorite) {
             // Retirer des favoris
             $user->favorites()->detach($product->id);
-            $message = 'Produit retiré des favoris';
+            $message = __('messages.favorites.removed');
             $isFavorite = false;
         } else {
             // Ajouter aux favoris
             $user->favorites()->attach($product->id);
-            $message = 'Produit ajouté aux favoris';
+            $message = __('messages.favorites.added');
             $isFavorite = true;
         }
 

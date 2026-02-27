@@ -54,7 +54,7 @@ Route::middleware(['auth', 'client'])
     | Gestion du panier
     |-------------------------------------------------
     */
-    Route::prefix('cart')->name('cart.')->group(function () {
+    Route::prefix('cart')->name('cart.')->middleware('throttle:cart-actions')->group(function () {
         Route::get('/', [CartController::class, 'index'])
             ->name('index');
             
@@ -84,6 +84,7 @@ Route::middleware(['auth', 'client'])
             ->name('checkout');
             
         Route::post('/', [OrderController::class, 'store'])
+            ->middleware('throttle:order-create')
             ->name('store');
             
         Route::get('/{order}', [OrderController::class, 'show'])

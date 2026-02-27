@@ -49,9 +49,9 @@ routes/
 ## 🔐 Sécurité & Authentification
 
 ### Middlewares
-- **ClientMiddleware**: Vérifie que l'utilisateur est connecté et a le rôle 'client'
-- **AdminMiddleware**: Protège les routes admin (existant)
-- **VendeurMiddleware**: Protège les routes vendeur (existant)
+- **Client**: Vérifie que l'utilisateur est connecté et a le rôle 'client'
+- **Admin**: Protège les routes admin (existant)
+- **Vendeur**: Protège les routes vendeur (existant)
 
 ### Règles de sécurité
 - Un client ne peut accéder qu'à ses propres données
@@ -132,9 +132,9 @@ Les routes client sont définies dans `routes/client.php` et incluses dans `rout
 
 ### Middlewares
 Enregistrés dans `bootstrap/app.php` avec les alias:
-- `admin` → AdminMiddleware
-- `client` → ClientMiddleware  
-- `vendeur` → VendeurMiddleware
+- `admin` → Admin
+- `client` → Client
+- `vendeur` → Vendeur
 
 ## 📝 Notes importantes
 

@@ -4,7 +4,6 @@ namespace App\Services\Vendeur;
 
 use App\Models\VendorOrder;
 use App\Models\OrderItem;
-use App\Notifications\OrderStatusChangedForClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -93,13 +92,6 @@ class OrderService
             
             DB::commit();
 
-            if ($oldStatus !== $status) {
-                $order->loadMissing('order.user');
-                if ($order->order && $order->order->user) {
-                    $order->order->user->notify(new OrderStatusChangedForClient($order->order, $status));
-                }
-            }
-            
             return $order->fresh();
             
         } catch (\Exception $e) {

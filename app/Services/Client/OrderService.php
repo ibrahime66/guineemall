@@ -7,8 +7,6 @@ use App\Models\OrderItem;
 use App\Models\VendorOrder;
 use App\Models\Cart;
 use App\Models\Product;
-use App\Models\Vendor;
-use App\Notifications\NewOrderForVendor;
 use App\Exceptions\OrderException;
 use App\Exceptions\StockException;
 use App\Exceptions\OrderStatusException;
@@ -84,11 +82,6 @@ class OrderService
                         'status' => 'pending',
                     ]);
 
-                    $vendor = Vendor::with('user')->find($vendorId);
-                    if ($vendor && $vendor->user) {
-                        $vendor->user->notify(new NewOrderForVendor($vendorOrder));
-                    }
-
                     // Créer les lignes de commande pour ce vendeur
                     foreach ($vendorItems as $item) {
                         OrderItem::create([
@@ -108,6 +101,10 @@ class OrderService
                 Cart::forUser($userId)->delete();
 
                 Log::info("Commande #{$order->id} créée avec succès pour l'utilisateur #{$userId}");
+
+                DB::afterCommit(function () use ($order) {
+                    event(new \App\Events\OrderCreated($order));
+                });
 
                 return $order;
 

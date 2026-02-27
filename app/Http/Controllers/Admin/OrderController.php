@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Notifications\OrderStatusChangedForClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -72,10 +71,6 @@ class OrderController extends Controller
                     ->update(['status' => 'cancelled']);
             }
         });
-
-        if ($order->user) {
-            $order->user->notify(new OrderStatusChangedForClient($order, $newStatus));
-        }
 
         return redirect()
             ->route('admin.orders.show', $order)

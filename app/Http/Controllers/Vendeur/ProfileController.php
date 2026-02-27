@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Vendor;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\VendorResource;
 
 class ProfileController extends Controller
 {
@@ -22,7 +24,7 @@ class ProfileController extends Controller
         
         if (!$vendor) {
             return redirect()->route('vendeur.profile.create')
-                ->with('info', 'Vous devez d\'abord créer votre boutique.');
+                ->with('info', __('messages.vendor.profile_required'));
         }
         
         return view('vendeur.profile.index', compact('vendor'));
@@ -37,7 +39,7 @@ class ProfileController extends Controller
         
         if (!$vendor) {
             return redirect()->route('vendeur.profile.create')
-                ->with('info', 'Vous devez d\'abord créer votre boutique.');
+                ->with('info', __('messages.vendor.profile_required'));
         }
         
         // Récupérer les produits du vendeur
@@ -99,7 +101,7 @@ class ProfileController extends Controller
             
             return redirect()
                 ->route('vendeur.profile.index')
-                ->with('success', 'Boutique créée avec succès. Elle est en attente de validation.');
+                ->with('success', __('messages.vendor.profile_created'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -119,6 +121,8 @@ class ProfileController extends Controller
         if (!$vendor) {
             return redirect()->route('vendeur.profile.create');
         }
+
+        $this->authorize('view', $vendor);
         
         return view('vendeur.profile.edit', compact('vendor'));
     }
@@ -133,6 +137,8 @@ class ProfileController extends Controller
         if (!$vendor) {
             return redirect()->route('vendeur.profile.create');
         }
+
+        $this->authorize('update', $vendor);
         
         $request->validate([
             'shop_name' => 'required|string|max:255|unique:vendors,shop_name,' . $vendor->id,
@@ -166,7 +172,7 @@ class ProfileController extends Controller
             
             return redirect()
                 ->route('vendeur.profile.index')
-                ->with('success', 'Profil mis à jour avec succès.');
+                ->with('success', __('messages.vendor.profile_updated'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -205,7 +211,7 @@ class ProfileController extends Controller
             
             return redirect()
                 ->route('vendeur.profile.index')
-                ->with('success', 'Mot de passe mis à jour avec succès.');
+                ->with('success', __('messages.vendor.password_updated'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -225,6 +231,8 @@ class ProfileController extends Controller
         if (!$vendor || !$vendor->logo) {
             return redirect()->back();
         }
+
+        $this->authorize('update', $vendor);
         
         try {
             // Supprimer le logo en utilisant le trait
@@ -232,7 +240,7 @@ class ProfileController extends Controller
             
             return redirect()
                 ->back()
-                ->with('success', 'Logo supprimé avec succès.');
+                ->with('success', __('messages.vendor.logo_deleted'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -250,13 +258,13 @@ class ProfileController extends Controller
         
         if (!$vendor) {
             return response()->json([
-                'error' => 'Aucune boutique associée',
+                'error' => __('messages.vendor.no_shop'),
             ], 404);
         }
         
         return response()->json([
-            'vendor' => $vendor,
-            'user' => auth()->user(),
+            'vendor' => new VendorResource($vendor),
+            'user' => new UserResource(auth()->user()),
         ]);
     }
 }

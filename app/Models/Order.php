@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -16,6 +17,13 @@ class Order extends Model
         'payment_method',
         'payment_reference',
         'payment_status',
+    ];
+
+    protected $casts = [
+        'total_amount' => 'decimal:2',
+        'payment_method' => 'string',
+        'payment_reference' => 'string',
+        'payment_status' => 'string',
     ];
 
     public function user()
@@ -31,6 +39,11 @@ class Order extends Model
     public function vendorOrders()
     {
         return $this->hasMany(VendorOrder::class);
+    }
+
+    public function statusHistories()
+    {
+        return $this->hasMany(OrderStatusHistory::class);
     }
 
     /**

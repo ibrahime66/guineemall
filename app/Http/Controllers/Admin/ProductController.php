@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Notifications\ProductRejectedForVendor;
+use App\Jobs\SendVendorNotificationJob;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -68,7 +69,10 @@ class ProductController extends Controller
         ]);
 
         if ($product->vendor && $product->vendor->user) {
-            $product->vendor->user->notify(new ProductRejectedForVendor($product));
+            SendVendorNotificationJob::dispatch(
+                $product->vendor->user,
+                new ProductRejectedForVendor($product)
+            );
         }
 
         return redirect()

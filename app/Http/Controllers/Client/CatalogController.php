@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
@@ -38,12 +39,14 @@ class CatalogController extends Controller
         }
 
         $products = $query->orderBy('created_at', 'desc')->paginate(12);
-        $categories = Category::query()
-            ->withCount(['products' => function ($query) {
-                $query->where('status', 'active');
-            }])
-            ->orderBy('name')
-            ->get();
+        $categories = Cache::remember('categories_with_counts', 600, function () {
+            return Category::query()
+                ->withCount(['products' => function ($query) {
+                    $query->where('status', 'active');
+                }])
+                ->orderBy('name')
+                ->get();
+        });
 
         return view('client.catalog.index', compact('products', 'categories'));
     }
@@ -84,12 +87,14 @@ class CatalogController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(12);
 
-        $categories = Category::query()
-            ->withCount(['products' => function ($query) {
-                $query->where('status', 'active');
-            }])
-            ->orderBy('name')
-            ->get();
+        $categories = Cache::remember('categories_with_counts', 600, function () {
+            return Category::query()
+                ->withCount(['products' => function ($query) {
+                    $query->where('status', 'active');
+                }])
+                ->orderBy('name')
+                ->get();
+        });
 
         return view('client.catalog.index', compact('products', 'categories', 'category'));
     }

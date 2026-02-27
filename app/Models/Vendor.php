@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Traits\HasImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Vendor extends Model
 {
-    use HasFactory, HasImage;
+    use HasFactory, HasImage, SoftDeletes;
 
     protected $fillable = [
         'user_id',

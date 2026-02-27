@@ -48,11 +48,11 @@ class CartController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Ce produit n\'est pas disponible.',
+                    'message' => __('messages.cart.product_unavailable'),
                 ], 422);
             }
 
-            return back()->with('error', 'Ce produit n\'est pas disponible.');
+            return back()->with('error', __('messages.cart.product_unavailable'));
         }
 
         // Vérifier le stock
@@ -60,11 +60,11 @@ class CartController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Quantité supérieure au stock disponible.',
+                    'message' => __('messages.cart.quantity_exceeds_stock'),
                 ], 422);
             }
 
-            return back()->with('error', 'Quantité supérieure au stock disponible.');
+            return back()->with('error', __('messages.cart.quantity_exceeds_stock'));
         }
 
         // Ajouter ou mettre à jour l'article dans le panier
@@ -86,7 +86,7 @@ class CartController extends Controller
             $cartItem->update(['quantity' => $product->stock]);
         }
 
-        $message = 'Produit ajouté au panier avec succès!';
+        $message = __('messages.cart.added');
         
         if ($request->expectsJson()) {
             return response()->json([
@@ -111,7 +111,7 @@ class CartController extends Controller
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('client.cart.index')
-                           ->with('error', 'Votre panier est vide. Ajoutez des produits avant de finaliser votre commande.');
+                           ->with('error', __('messages.cart.empty'));
         }
 
         $total = $cartItems->sum(function ($item) {
@@ -138,11 +138,11 @@ class CartController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Quantité non disponible. Stock disponible: ' . $product->stock,
+                'message' => __('messages.cart.quantity_unavailable', ['stock' => $product->stock]),
                 ], 422);
             }
 
-            return back()->with('error', 'Quantité non disponible. Stock disponible: ' . $product->stock);
+        return back()->with('error', __('messages.cart.quantity_unavailable', ['stock' => $product->stock]));
         }
 
         if ($request->quantity > 0) {
@@ -154,11 +154,11 @@ class CartController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Panier mis à jour avec succès.',
+                'message' => __('messages.cart.updated'),
             ]);
         }
 
-        return back()->with('success', 'Panier mis à jour avec succès.');
+        return back()->with('success', __('messages.cart.updated'));
     }
 
     /**
@@ -176,11 +176,11 @@ class CartController extends Controller
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Produit retiré du panier.',
+                'message' => __('messages.cart.removed'),
             ]);
         }
 
-        return back()->with('success', 'Produit retiré du panier.');
+        return back()->with('success', __('messages.cart.removed'));
     }
 
     /**
@@ -193,10 +193,10 @@ class CartController extends Controller
         if (request()->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Panier vidé avec succès.',
+                'message' => __('messages.cart.cleared'),
             ]);
         }
 
-        return back()->with('success', 'Panier vidé avec succès.');
+        return back()->with('success', __('messages.cart.cleared'));
     }
 }

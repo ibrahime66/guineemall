@@ -3,11 +3,30 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Vendor;
+use App\Models\VendorOrder;
+use App\Policies\OrderPolicy;
+use App\Policies\ProductPolicy;
+use App\Policies\VendorPolicy;
+use App\Policies\VendorOrderPolicy;
+use App\Observers\OrderObserver;
+use App\Observers\ProductObserver;
+use App\Observers\VendorObserver;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
+use App\Events\OrderCreated;
+use App\Events\OrderStatusChanged;
+use App\Listeners\SendOrderCreatedNotifications;
+use App\Listeners\SendOrderStatusChangedNotification;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +44,23 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        Gate::policy(Order::class, OrderPolicy::class);
+        Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(Vendor::class, VendorPolicy::class);
+        Gate::policy(VendorOrder::class, VendorOrderPolicy::class);
+
+        RateLimiter::for('order-create', function (Request $request) {
+            return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('cart-actions', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('product-create', function (Request $request) {
+            return Limit::perMinute(15)->by($request->user()?->id ?: $request->ip());
+        });
 
         Event::listen(Login::class, function (Login $event) {
             $sessionId = session()->getId();
@@ -64,5 +100,12 @@ class AppServiceProvider extends ServiceProvider
                 }
             });
         });
+
+        Event::listen(OrderCreated::class, SendOrderCreatedNotifications::class);
+        Event::listen(OrderStatusChanged::class, SendOrderStatusChangedNotification::class);
+
+        Order::observe(OrderObserver::class);
+        Product::observe(ProductObserver::class);
+        Vendor::observe(VendorObserver::class);
     }
 }

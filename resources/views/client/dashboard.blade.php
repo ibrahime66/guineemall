@@ -86,7 +86,7 @@
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             @forelse($categories as $category)
-                <a href="{{ route('client.catalog.category', $category->slug) }}" class="group">
+                <a href="{{ route('client.catalog.category', $category) }}" class="group">
                     <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all p-4 text-center cursor-pointer group-hover:scale-105">
                         <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2 group-hover:bg-green-200">
                             <i class="fas fa-tag text-green-600 text-lg"></i>

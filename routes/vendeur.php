@@ -53,6 +53,7 @@ Route::middleware(['auth', 'vendeur'])
             ->name('create');
             
         Route::post('/', [ProductController::class, 'store'])
+            ->middleware('throttle:product-create')
             ->name('store');
             
         Route::get('/{product}', [ProductController::class, 'show'])

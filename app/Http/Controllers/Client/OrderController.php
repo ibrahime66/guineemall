@@ -43,10 +43,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): View
     {
-        // Vérifier que la commande appartient au client connecté
-        if ($order->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé à cette commande.');
-        }
+        $this->authorize('view', $order);
 
         $order->load(['orderItems.product.category', 'orderItems.product.vendor', 'vendorOrders.vendor']);
 
@@ -65,7 +62,7 @@ class OrderController extends Controller
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('client.cart.index')
-                           ->with('error', 'Votre panier est vide.');
+                           ->with('error', __('messages.orders.empty_cart'));
         }
 
         // Vérifier que le client a les informations requises
@@ -113,22 +110,22 @@ class OrderController extends Controller
                 ]);
             }
 
-            return redirect()->route('client.orders.show', $order)
-                ->with('success', 'Commande créée avec succès! Votre commande #' . $order->id . ' est en attente de confirmation.');
+                return redirect()->route('client.orders.show', $order)
+                    ->with('success', __('messages.orders.order_created', ['id' => $order->id]));
         } catch (StockException $e) {
-            return back()->with('error', 'Problème de stock: ' . $e->getMessage());
+            return back()->with('error', __('messages.orders.stock_error', ['message' => $e->getMessage()]));
         } catch (OrderException $e) {
-            return back()->with('error', 'Erreur de commande: ' . $e->getMessage());
+            return back()->with('error', __('messages.orders.order_exception', ['message' => $e->getMessage()]));
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la création de commande: ' . $e->getMessage());
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Une erreur technique est survenue. Veuillez réessayer.',
+                    'message' => __('messages.orders.order_error'),
                 ], 500);
             }
 
-            return back()->with('error', 'Une erreur technique est survenue. Veuillez réessayer.');
+            return back()->with('error', __('messages.orders.order_error'));
         }
     }
 
@@ -137,15 +134,12 @@ class OrderController extends Controller
      */
     public function cancel(Order $order): RedirectResponse
     {
-        // Vérifier que la commande appartient au client connecté
-        if ($order->user_id !== auth()->id()) {
-            abort(403, 'Accès non autorisé à cette commande.');
-        }
+        $this->authorize('cancel', $order);
 
         try {
             $this->orderService->cancelOrder($order);
             
-            return back()->with('success', 'Commande annulée avec succès.');
+            return back()->with('success', __('messages.orders.order_cancelled'));
         } catch (OrderStatusException $e) {
             return back()->with('error', $e->getMessage());
         } catch (\Exception $e) {

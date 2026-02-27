@@ -150,10 +150,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): View
     {
-        // Vérifier que le produit appartient au vendeur
-        if ($product->vendor_id !== auth()->user()->vendor->id) {
-            abort(403, 'Ce produit ne vous appartient pas.');
-        }
+        $this->authorize('view', $product);
         
         return view('vendeur.products.show', compact('product'));
     }
@@ -163,10 +160,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-        // Vérifier que le produit appartient au vendeur
-        if ($product->vendor_id !== auth()->user()->vendor->id) {
-            abort(403, 'Ce produit ne vous appartient pas.');
-        }
+        $this->authorize('update', $product);
         
         $categories = $this->productService->getCategories();
         return view('vendeur.products.edit', compact('product', 'categories'));
@@ -178,6 +172,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         try {
+            $this->authorize('update', $product);
             $image = $request->file('image');
             
             $this->productService->updateProduct(
@@ -204,6 +199,7 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         try {
+            $this->authorize('delete', $product);
             $this->productService->deleteProduct($product);
             
             return redirect()

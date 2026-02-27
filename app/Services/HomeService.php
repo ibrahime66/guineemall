@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class HomeService
 {
@@ -14,22 +15,24 @@ class HomeService
      */
     public function getPopularProducts(): Collection
     {
-        // Priorité 1: Produits les plus vendus (basé sur les commandes)
-        $popularBySales = $this->getProductsBySales();
-        
-        if ($popularBySales->count() >= 4) {
-            return $popularBySales->take(4);
-        }
+        return Cache::remember('popular_products', 600, function () {
+            // Priorité 1: Produits les plus vendus (basé sur les commandes)
+            $popularBySales = $this->getProductsBySales();
+            
+            if ($popularBySales->count() >= 4) {
+                return $popularBySales->take(4);
+            }
 
-        // Priorité 2: Produits les plus consultés (si disponible)
-        $popularByViews = $this->getProductsByViews();
-        
-        if ($popularByViews->count() >= 4) {
-            return $popularByViews->take(4);
-        }
+            // Priorité 2: Produits les plus consultés (si disponible)
+            $popularByViews = $this->getProductsByViews();
+            
+            if ($popularByViews->count() >= 4) {
+                return $popularByViews->take(4);
+            }
 
-        // Fallback: Combiner ventes + vues + derniers produits
-        return $this->getFallbackPopularProducts($popularBySales, $popularByViews);
+            // Fallback: Combiner ventes + vues + derniers produits
+            return $this->getFallbackPopularProducts($popularBySales, $popularByViews);
+        });
     }
 
     /**

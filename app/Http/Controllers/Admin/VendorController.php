@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use App\Notifications\VendorApproved;
+use App\Jobs\SendVendorNotificationJob;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -58,7 +59,10 @@ class VendorController extends Controller
         ]);
 
         if ($vendor->user) {
-            $vendor->user->notify(new VendorApproved($vendor));
+            SendVendorNotificationJob::dispatch(
+                $vendor->user,
+                new VendorApproved($vendor)
+            );
         }
 
         return redirect()
@@ -99,7 +103,10 @@ class VendorController extends Controller
         ]);
 
         if ($vendor->user) {
-            $vendor->user->notify(new VendorApproved($vendor));
+            SendVendorNotificationJob::dispatch(
+                $vendor->user,
+                new VendorApproved($vendor)
+            );
         }
 
         return redirect()

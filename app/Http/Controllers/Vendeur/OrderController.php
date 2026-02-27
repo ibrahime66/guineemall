@@ -69,6 +69,8 @@ class OrderController extends Controller
     {
         $vendorId = auth()->user()->vendor->id;
         $order = $this->orderService->getVendorOrder($vendorId, $id);
+
+        $this->authorize('view', $order);
         
         return view('vendeur.orders.show', compact('order'));
     }
@@ -78,6 +80,7 @@ class OrderController extends Controller
      */
     public function updateStatus(Request $request, VendorOrder $order): RedirectResponse|JsonResponse
     {
+        $this->authorize('update', $order);
         try {
             $request->validate([
                 'status' => 'required|in:pending,confirmed,preparing,ready,delivered,cancelled'
@@ -87,13 +90,13 @@ class OrderController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Statut de la commande mis à jour avec succès.',
+                    'message' => __('messages.vendor_orders.status_updated'),
                 ]);
             }
 
             return redirect()
                 ->back()
-                ->with('success', 'Statut de la commande mis à jour avec succès.');
+                ->with('success', __('messages.vendor_orders.status_updated'));
                 
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
@@ -114,12 +117,13 @@ class OrderController extends Controller
      */
     public function confirm(VendorOrder $order): RedirectResponse
     {
+        $this->authorize('update', $order);
         try {
             $this->orderService->updateOrderStatus($order, 'confirmed');
             
             return redirect()
                 ->back()
-                ->with('success', 'Commande confirmée avec succès.');
+                ->with('success', __('messages.vendor_orders.confirmed'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -133,12 +137,13 @@ class OrderController extends Controller
      */
     public function preparing(VendorOrder $order): RedirectResponse
     {
+        $this->authorize('update', $order);
         try {
             $this->orderService->updateOrderStatus($order, 'preparing');
             
             return redirect()
                 ->back()
-                ->with('success', 'Commande marquée comme en préparation.');
+                ->with('success', __('messages.vendor_orders.preparing'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -152,12 +157,13 @@ class OrderController extends Controller
      */
     public function ready(VendorOrder $order): RedirectResponse
     {
+        $this->authorize('update', $order);
         try {
             $this->orderService->updateOrderStatus($order, 'ready');
             
             return redirect()
                 ->back()
-                ->with('success', 'Commande marquée comme prête pour livraison.');
+                ->with('success', __('messages.vendor_orders.ready'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -171,12 +177,13 @@ class OrderController extends Controller
      */
     public function delivered(VendorOrder $order): RedirectResponse
     {
+        $this->authorize('update', $order);
         try {
             $this->orderService->updateOrderStatus($order, 'delivered');
             
             return redirect()
                 ->back()
-                ->with('success', 'Commande marquée comme livrée.');
+                ->with('success', __('messages.vendor_orders.delivered'));
                 
         } catch (\Exception $e) {
             return redirect()
@@ -190,6 +197,7 @@ class OrderController extends Controller
      */
     public function cancel(Request $request, VendorOrder $order): RedirectResponse
     {
+        $this->authorize('update', $order);
         try {
             $request->validate([
                 'cancel_reason' => 'required|string|max:500'
@@ -201,7 +209,7 @@ class OrderController extends Controller
             
             return redirect()
                 ->back()
-                ->with('success', 'Commande annulée avec succès.');
+                ->with('success', __('messages.vendor_orders.cancelled'));
                 
         } catch (\Exception $e) {
             return redirect()

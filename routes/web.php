@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PagesController;
@@ -21,6 +24,42 @@ use App\Http\Controllers\Admin\ClientController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/up', function () {
+    $checks = [
+        'database' => false,
+        'cache' => false,
+        'queue' => false,
+    ];
+
+    try {
+        DB::connection()->getPdo();
+        $checks['database'] = true;
+    } catch (\Throwable $e) {
+        $checks['database'] = false;
+    }
+
+    try {
+        Cache::store()->put('healthcheck', 'ok', 5);
+        $checks['cache'] = Cache::store()->get('healthcheck') === 'ok';
+    } catch (\Throwable $e) {
+        $checks['cache'] = false;
+    }
+
+    try {
+        Queue::size();
+        $checks['queue'] = true;
+    } catch (\Throwable $e) {
+        $checks['queue'] = false;
+    }
+
+    $healthy = collect($checks)->every(fn ($value) => $value === true);
+
+    return response()->json([
+        'status' => $healthy ? 'ok' : 'degraded',
+        'checks' => $checks,
+    ], $healthy ? 200 : 500);
+});
 
 /*
 |--------------------------------------------------------------------------

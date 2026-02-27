@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
@@ -51,6 +52,8 @@ class CategoryController extends Controller
         ];
 
         Category::create($validated);
+        Cache::forget('categories_active');
+        Cache::forget('categories_with_counts');
 
         return redirect()
             ->route('admin.categories.index')
@@ -92,6 +95,8 @@ class CategoryController extends Controller
         }
 
         $category->update($validated);
+        Cache::forget('categories_active');
+        Cache::forget('categories_with_counts');
 
         return redirect()
             ->route('admin.categories.index')
@@ -118,6 +123,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
+        Cache::forget('categories_active');
+        Cache::forget('categories_with_counts');
 
         return redirect()
             ->route('admin.categories.index')
