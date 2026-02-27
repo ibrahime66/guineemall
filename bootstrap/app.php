@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Client;
 use App\Http\Middleware\Vendeur;
+use App\Http\Middleware\LogAdminActions;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => Admin::class,
             'client' => Client::class,
             'vendeur' => Vendeur::class,
+            'admin.logs' => LogAdminActions::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

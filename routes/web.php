@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,7 +140,7 @@ Route::middleware('auth')->group(function () {
 | Routes ADMIN
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'admin'])
+Route::middleware(['auth', 'admin', 'admin.logs'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -236,6 +237,35 @@ Route::middleware(['auth', 'admin'])
     });
 
 require __DIR__.'/client.php';
+
+/*
+|--------------------------------------------------------------------------
+| Routes CHAT - Disponibles pour tous les utilisateurs authentifiés
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->prefix('chat')->name('chat.')->group(function () {
+    Route::get('/', [ChatController::class, 'index'])->name('index');
+    Route::get('/find', function() {
+        return view('chat.find');
+    })->name('find');
+    Route::get('/{user}', [ChatController::class, 'show'])->name('show');
+    Route::post('/send/{user}', [ChatController::class, 'sendMessage'])->name('send');
+    Route::get('/product/{product}', [ChatController::class, 'startFromProduct'])->name('product');
+    Route::get('/order/{order}', [ChatController::class, 'startFromOrder'])->name('order');
+    Route::get('/api/unread', [ChatController::class, 'getUnreadMessages'])->name('unread');
+    Route::patch('/read/{message}', [ChatController::class, 'markAsRead'])->name('read');
+    Route::delete('/delete/{user}', [ChatController::class, 'deleteConversation'])->name('delete');
+    Route::get('/search', [ChatController::class, 'search'])->name('search');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Route de TEST pour le chat
+|--------------------------------------------------------------------------
+*/
+Route::get('/test-chat', function() {
+    return view('test-chat');
+})->name('test.chat')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------

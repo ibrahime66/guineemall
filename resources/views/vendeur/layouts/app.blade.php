@@ -11,6 +11,7 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    @livewireStyles
     
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -43,6 +44,22 @@
         .sidebar-item.active {
             background: rgba(16, 185, 129, 0.15);
             border-left: 4px solid #10b981;
+        }
+        
+        /* Styles spécifiques pour le sidebar fixe */
+        .vendor-sidebar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 50;
+        }
+        
+        @media (min-width: 1024px) {
+            .vendor-sidebar-fixed {
+                transform: translateX(0) !important;
+            }
         }
         .floating {
             animation: floating 4s ease-in-out infinite;
@@ -92,6 +109,20 @@
                     <button id="vendorMenuButton" type="button" class="lg:hidden w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all" aria-label="Ouvrir le menu">
                         <i class="fas fa-bars text-gray-600"></i>
                     </button>
+                    
+                    {{-- Messages et Notifications --}}
+                    <div class="flex items-center space-x-2">
+                        <!-- Notifications de chat -->
+                        @livewire('chat-notification')
+                        
+                        <!-- Messages -->
+                        <a href="{{ route('chat.index') }}" 
+                           class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all"
+                           title="Messages">
+                            <i class="fas fa-comments text-gray-600"></i>
+                        </a>
+                    </div>
+
                     {{-- Notifications --}}
                     <div class="relative">
                         <a href="{{ route('vendeur.notifications.index') }}" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all">
@@ -144,6 +175,10 @@
                                 <i class="fas fa-shopping-cart w-4 text-purple-600"></i>
                                 <span class="ml-3">Mes commandes</span>
                             </a>
+                            <a href="{{ route('chat.index') }}" class="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-comments w-4 text-purple-600"></i>
+                                <span class="ml-3">Messages clients</span>
+                            </a>
                             <hr class="my-2">
                             <a href="{{ route('vendeur.profile.index') }}" class="flex items-center px-4 py-2 hover:bg-gray-50 transition-colors">
                                 <i class="fas fa-store w-4 text-purple-600"></i>
@@ -173,12 +208,12 @@
 
     <main class="flex flex-col lg:flex-row">
         {{-- Sidebar Moderne --}}
-        <aside id="vendorSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white/80 backdrop-blur-lg shadow-xl border-r border-gray-200 h-screen overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:relative">
+        <aside id="vendorSidebar" class="vendor-sidebar-fixed w-64 bg-white/80 backdrop-blur-lg shadow-xl border-r border-gray-200 overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0">
             @include('vendeur.partials.sidebar')
         </aside>
 
         {{-- Contenu --}}
-        <div class="flex-1 p-4 sm:p-6 lg:ml-0">
+        <div class="flex-1 p-4 sm:p-6 lg:ml-64">
             {{-- Messages flash --}}
             @include('vendeur.partials.alerts')
             
@@ -214,5 +249,7 @@
         }
     });
     </script>
+    @livewireScripts
+    @livewireScriptConfig
 </body>
 </html>

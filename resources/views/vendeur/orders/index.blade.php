@@ -197,7 +197,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @livewire('vendor-order-status-badge', ['vendorOrderId' => $order->id], key('vendor-status-'.$order->id))
+                                    @livewire('vendor-order-status-badge', ['status' => $order->status, 'vendorOrderId' => $order->id], key('vendor-status-'.$order->id))
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $order->created_at->format('d/m/Y H:i') }}

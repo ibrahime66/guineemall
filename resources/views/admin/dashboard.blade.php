@@ -6,10 +6,10 @@
 <style>
     /* Thème Vert/Blanc Admin */
     .admin-gradient {
-        background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+        background: linear-gradient(135deg, #b97e10ff 0%, #ec661dff 50%, #eddbbeff 100%);
     }
     .admin-gradient-text {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background: linear-gradient(135deg, #d8a93bff 0%, #e8c126ff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -32,8 +32,8 @@
         animation: pulseGlow 2s ease-in-out infinite;
     }
     @keyframes pulseGlow {
-        0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
-        50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.8); }
+        0%, 100% { box-shadow: 0 0 20px rgba(238, 164, 54, 0.5); }
+        50% { box-shadow: 0 0 40px rgba(240, 177, 77, 0.8); }
     }
     .slide-in {
         animation: slideIn 0.6s ease-out;
@@ -412,14 +412,14 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                 label: 'Commandes',
                 data: dailyStats.map(stat => stat.orders),
-                borderColor: 'rgb(16, 185, 129)',
+                borderColor: 'rgba(185, 78, 16, 1)',
                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
                 tension: 0.4,
                 fill: true
             }, {
                 label: 'Utilisateurs',
                 data: dailyStats.map(stat => stat.users),
-                borderColor: 'rgb(59, 130, 246)',
+                borderColor: 'rgba(247, 181, 82, 1), 1)',
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 tension: 0.4,
                 fill: true

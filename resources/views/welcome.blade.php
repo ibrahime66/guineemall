@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'GuinéeMall') }} - La marketplace N°1 en Guinée</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -134,6 +135,18 @@
                         <a href="{{ url('/dashboard') }}" class="text-gray-700 hover:text-purple-600 font-medium transition-colors">
                             <i class="fas fa-tachometer-alt mr-2"></i>Tableau de bord
                         </a>
+                        
+                        <!-- Messages et Notifications -->
+                        <div class="flex items-center space-x-3">
+                            <!-- Notifications de chat -->
+                            @livewire('chat-notification')
+                            
+                            <!-- Messages -->
+                            <a href="{{ route('chat.index') }}" 
+                               class="text-gray-700 hover:text-purple-600 font-medium transition-colors">
+                                <i class="fas fa-comments mr-2"></i>Messages
+                            </a>
+                        </div>
                     @endauth
                     <a href="{{ route('client.catalog.index') }}" class="text-gray-700 hover:text-purple-600 font-medium transition-colors">
                         <i class="fas fa-shopping-bag mr-2"></i>Produits
@@ -171,6 +184,20 @@
                     </button>
                 </div>
             </form>
+            
+            @auth
+            <!-- Liens mobiles pour les utilisateurs connectés -->
+            <div class="mt-4 space-y-2">
+                <a href="{{ route('chat.index') }}" 
+                   class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                    <i class="fas fa-comments mr-2"></i>Messages
+                </a>
+                <a href="{{ url('/dashboard') }}" 
+                   class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Tableau de bord
+                </a>
+            </div>
+            @endauth
         </div>
     </nav>
 
@@ -773,5 +800,6 @@
             menu.classList.toggle('hidden');
         }
     </script>
+    @livewireScripts
 </body>
 </html>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\SocialiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -21,6 +22,19 @@ Route::middleware('guest')->group(function () {
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    // Social Login Routes
+    Route::get('login/google', [SocialiteController::class, 'redirectToGoogle'])
+        ->name('login.google');
+
+    Route::get('login/google/callback', [SocialiteController::class, 'handleGoogleCallback'])
+        ->name('login.google.callback');
+
+    Route::get('login/facebook', [SocialiteController::class, 'redirectToFacebook'])
+        ->name('login.facebook');
+
+    Route::get('login/facebook/callback', [SocialiteController::class, 'handleFacebookCallback'])
+        ->name('login.facebook.callback');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

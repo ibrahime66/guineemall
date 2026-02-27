@@ -88,7 +88,7 @@
 <div class="flex flex-col lg:flex-row min-h-screen">
 
     <!-- Sidebar Admin Moderne -->
-    <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-72 admin-gradient text-white shadow-2xl overflow-y-auto h-screen transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:relative">
+    <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-72 admin-gradient text-white shadow-2xl overflow-y-auto h-screen transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0">
         <!-- Background Pattern -->
         <div class="absolute inset-0 opacity-10">
             <div class="absolute top-10 left-10 w-32 h-32 bg-white rounded-full"></div>
@@ -215,9 +215,9 @@
     <div id="adminOverlay" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden"></div>
 
     <!-- Main Content -->
-    <main class="flex-1 min-h-screen lg:ml-0">
+    <main class="flex-1 min-h-screen lg:ml-72">
         <!-- Top Bar -->
-        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-gray-200">
+        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-gray-200 sticky top-0 z-30">
             <div class="px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap gap-4 justify-between items-center">
                 <div class="flex items-center gap-3">
                     <button id="adminMenuButton" type="button" class="lg:hidden w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors" aria-label="Ouvrir le menu">
@@ -277,11 +277,11 @@
                     <!-- User Menu -->
                     <div class="flex items-center space-x-3">
                         <div class="text-right hidden sm:block">
-                            <p class="text-sm font-bold text-gray-800">{{ auth()->user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ now()->format('H:i') }}</p>
+                            <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
+                            <p class="text-xs text-gray-500">Administrateur</p>
                         </div>
-                        <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center">
-                            <i class="fas fa-user text-white"></i>
+                        <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-white text-sm"></i>
                         </div>
                     </div>
                 </div>
@@ -289,7 +289,7 @@
         </header>
 
         <!-- Page Content -->
-        <div class="p-4 sm:p-6 lg:p-8 min-h-[calc(100vh-80px)]">
+        <div class="p-4 sm:p-6 lg:p-8">
             @yield('content')
         </div>
     </main>

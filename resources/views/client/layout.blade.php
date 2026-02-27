@@ -51,6 +51,19 @@
                     {{-- Icône panier --}}
                     @livewire('cart-counter')
 
+                    {{-- Messages et Notifications --}}
+                    <div class="flex items-center space-x-2">
+                        <!-- Notifications de chat -->
+                        @livewire('chat-notification')
+                        
+                        <!-- Messages -->
+                        <a href="{{ route('chat.index') }}" 
+                           class="flex items-center space-x-1 text-gray-600 hover:text-purple-600 transition-colors p-2">
+                            <i class="fas fa-comments"></i>
+                            <span class="hidden md:inline">Messages</span>
+                        </a>
+                    </div>
+
                     {{-- Bouton profil --}}
                     @auth
                         <div x-data="{ open: false }" class="relative">
@@ -71,6 +84,9 @@
                                 <a href="{{ route('client.orders.index') }}" class="block px-4 py-2 hover:bg-gray-100">Mes Commandes</a>
                                 <a href="{{ route('client.favorites.index') }}" class="block px-4 py-2 hover:bg-gray-100">Mes Favoris</a>
                                 <a href="{{ route('client.cart.index') }}" class="block px-4 py-2 hover:bg-gray-100">Mon Panier</a>
+                                <a href="{{ route('chat.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                                    <i class="fas fa-comments mr-2"></i>Messages
+                                </a>
                                 <hr class="my-2">
                                 <a href="javascript:void(0)" 
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 

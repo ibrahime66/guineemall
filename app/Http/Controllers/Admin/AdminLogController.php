@@ -30,7 +30,12 @@ class AdminLogController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.logs.index', compact('logs'));
+        // Récupérer tous les admins pour le filtre
+        $admins = \App\Models\User::where('role', 'admin')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.logs.index', compact('logs', 'admins'));
     }
 
     /**
@@ -39,6 +44,55 @@ class AdminLogController extends Controller
     public function show(AdminLog $adminLog)
     {
         return view('admin.logs.show', compact('adminLog'));
+    }
+
+    /**
+     * Obtenir la classe CSS pour le badge d'action
+     */
+    public static function getActionBadgeClass($action)
+    {
+        if (str_contains(strtolower($action), 'création') || str_contains(strtolower($action), 'creation')) {
+            return 'bg-green-100 text-green-800';
+        }
+        if (str_contains(strtolower($action), 'suppression') || str_contains(strtolower($action), 'delete')) {
+            return 'bg-red-100 text-red-800';
+        }
+        if (str_contains(strtolower($action), 'modification') || str_contains(strtolower($action), 'mise à jour')) {
+            return 'bg-blue-100 text-blue-800';
+        }
+        if (str_contains(strtolower($action), 'approbation') || str_contains(strtolower($action), 'activation')) {
+            return 'bg-emerald-100 text-emerald-800';
+        }
+        if (str_contains(strtolower($action), 'suspension') || str_contains(strtolower($action), 'blocage')) {
+            return 'bg-amber-100 text-amber-800';
+        }
+        return 'bg-gray-100 text-gray-800';
+    }
+
+    /**
+     * Obtenir le type d'action
+     */
+    public static function getActionType($action)
+    {
+        if (str_contains(strtolower($action), 'création') || str_contains(strtolower($action), 'creation')) {
+            return 'Création';
+        }
+        if (str_contains(strtolower($action), 'suppression') || str_contains(strtolower($action), 'delete')) {
+            return 'Suppression';
+        }
+        if (str_contains(strtolower($action), 'modification') || str_contains(strtolower($action), 'mise à jour')) {
+            return 'Modification';
+        }
+        if (str_contains(strtolower($action), 'approbation') || str_contains(strtolower($action), 'activation')) {
+            return 'Activation';
+        }
+        if (str_contains(strtolower($action), 'suspension') || str_contains(strtolower($action), 'blocage')) {
+            return 'Restriction';
+        }
+        if (str_contains(strtolower($action), 'consultation') || str_contains(strtolower($action), 'affichage')) {
+            return 'Consultation';
+        }
+        return 'Action';
     }
 
     /**

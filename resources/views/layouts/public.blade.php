@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'GuinéeMall') }} - {{ $pageTitle ?? 'Marketplace N°1 en Guinée' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -73,6 +74,18 @@
                         <a href="{{ url('/dashboard') }}" class="text-gray-700 hover:text-green-600 font-medium transition-colors">
                             <i class="fas fa-tachometer-alt mr-2"></i>Tableau de bord
                         </a>
+                        
+                        <!-- Messages et Notifications -->
+                        <div class="flex items-center space-x-3">
+                            <!-- Notifications de chat -->
+                            @livewire('chat-notification')
+                            
+                            <!-- Messages -->
+                            <a href="{{ route('chat.index') }}" 
+                               class="text-gray-700 hover:text-green-600 font-medium transition-colors">
+                                <i class="fas fa-comments mr-2"></i>Messages
+                            </a>
+                        </div>
                     @endauth
                 </div>
 
@@ -142,5 +155,6 @@
             console.log('Mobile menu toggle');
         }
     </script>
+    @livewireScripts
 </body>
 </html>

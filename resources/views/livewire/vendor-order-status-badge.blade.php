@@ -1,4 +1,4 @@
-<span wire:poll.10s
-      class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClasses }}">
-    {{ $statusLabel }}
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border {{ $this->getStatusColor() }}">
+    <i class="{{ $this->getStatusIcon() }} mr-1"></i>
+    {{ $this->getStatusText() }}
 </span>

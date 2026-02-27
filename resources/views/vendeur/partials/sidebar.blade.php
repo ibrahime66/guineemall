@@ -85,6 +85,13 @@
             @endif
         </div>
 
+        <!-- Messages -->
+        <a href="{{ route('chat.index') }}" 
+           class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 hover:text-green-600 transition-all">
+            <i class="fas fa-comments w-5"></i>
+            <span class="font-medium">Messages clients</span>
+        </a>
+
         <!-- Profil -->
         <div class="space-y-1">
             <a href="{{ route('vendeur.profile.index') }}" 

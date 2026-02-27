@@ -49,7 +49,7 @@
                     </td>
 
                     <td class="p-3">
-                        @livewire('order-status-badge', ['orderId' => $order->id], key('admin-order-status-'.$order->id))
+                        <x-order-status-badge :order="$order" />
                     </td>
 
                     <td class="p-3">

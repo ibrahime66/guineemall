@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategorySeeder::class,    // Catégories par défaut
             VendorSeeder::class,      // Vendeurs par défaut
+            AdminLogSeeder::class,    // Logs d'exemple
         ]);
     }
 }
